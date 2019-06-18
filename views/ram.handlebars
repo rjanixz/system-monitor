@@ -1,0 +1,140 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>Sistemas Operativos 1</title>
+    <!-- GLOBAL MAINLY STYLES-->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="vendors/line-awesome/css/line-awesome.min.css" rel="stylesheet" />
+    <link href="vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <link href="vendors/animate.css/animate.min.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->
+    <link href="vendors/morris.js/morris.css" rel="stylesheet" />
+    <!-- THEME STYLES-->
+    <link href="css/main.min.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <header class="header">
+            <!-- START TOP-LEFT TOOLBAR-->
+            <ul class="nav navbar-toolbar">
+                <li>
+                    <a class="nav-link sidebar-toggler js-sidebar-toggler" href="javascript:;">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                </li>
+            </ul>
+            <!-- END TOP-LEFT TOOLBAR-->
+            <!--LOGO-->
+            <a class="page-brand" href="index.html">SO</a>
+            <!-- START TOP-RIGHT TOOLBAR-->
+            <ul class="nav navbar-toolbar">
+                <li class="dropdown dropdown-user">
+                    <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                        <span>Admin</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- END TOP-RIGHT TOOLBAR-->
+        </header>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <nav class="page-sidebar">
+            <ul class="side-menu metismenu scroller">
+                <li class="active">
+                    <a href="javascript:;"><i class="sidebar-item-icon ti-home"></i>
+                        <span class="nav-label">Dashboards</span><i class="fa fa-angle-left arrow"></i></a>
+                    <ul class="nav-2-level collapse in">
+                        <li>
+                            <a href="/">Procesos</a>
+                        </li>
+                        <li>
+                            <a class="active" href="/ram">RAM</a>
+                        </li>
+                        <li>
+                            <a href="/cpu">CPU</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body flexbox-b">
+                                <div class="easypie mr-4" data-percent="1" data-bar-color="#5c6bc0" data-size="80" data-line-width="8">
+                                    <span class="easypie-data text-primary" style="font-size:32px;"><i class="la la-dashboard"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="font-strong text-primary">{{memTotal}}</h3>
+                                    <div class="text-muted">Memoria Total (MB)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body flexbox-b">
+                                <div class="easypie mr-4" data-percent="80" data-bar-color="#ff4081" data-size="80" data-line-width="8">
+                                    <span class="easypie-data font-26 text-pink"><i class="la la-dashboard"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="font-strong text-pink">{{memUsage}}</h3>
+                                    <div class="text-muted">Memoria en uso (MB)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ibox-fullheight">
+                            <div class="ibox-head">
+                                <div>
+                                    <div class="ibox-title">Porcentaje de consumo</div><small class="text-lighter">Memoria RAM</small></div>
+                            </div>
+                            <div class="ibox-body">
+                                <div class="mt-5 mb-5"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                    <canvas id="earnings_chart" style="height: 600px; display: block; width: 533px;" width="533" height="100" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            <footer class="page-footer">
+                <div class="font-13">2019 <b>Vacaciones Junio</b> - Sistemas Operativos 1, Práctica 1</div>
+
+                <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- CORE PLUGINS-->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendors/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="vendors/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="vendors/jquery-validation/dist/jquery.validate.min.js"></script>
+    <!-- PAGE LEVEL PLUGINS-->
+    <script src="vendors/chart.js/dist/Chart.min.js"></script>
+    <script src="vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="js/app.min.js"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script src="js/scripts/dashboard_visitors.js"></script>
+    <script src="js/scripts/dashboard_4.js"></script>
+</body>

@@ -1,0 +1,30 @@
+{
+  "name": "practica1",
+  "version": "1.0.0",
+  "description": "Práctica 1 - Sistemas Operativos 1 - Vaciones Junio 2019",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rjanixz/system-monitor.git"
+  },
+  "author": "Rainman Sián",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rjanixz/system-monitor/issues"
+  },
+  "homepage": "https://github.com/rjanixz/system-monitor#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "hashmap": "^2.3.0",
+    "os-utils": "0.0.14",
+    "underscore": "^1.9.1"
+  }
+}
