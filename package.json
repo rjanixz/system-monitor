@@ -24,6 +24,7 @@
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
     "hashmap": "^2.3.0",
+    "mongodb": "^3.2.7",
     "os-utils": "0.0.14",
     "underscore": "^1.9.1"
   }

@@ -2,6 +2,8 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 
+const MongoClient = require('mongodb').MongoClient;
+
 const app = express();
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -13,6 +15,16 @@ app.use(express.urlencoded({extended: false}));
 
 app.disable('etag');
 
+
+// Connection URL
+const url = 'mongodb://admin:admin@35.225.220.91:27017';
+ 
+// Database Name
+const DB_NAME = 'sopes1proyecto';
+
+const COLLECITON_NAME = 'tweets';
+
+/*
 // procesos
 app.get('/', (req, res) => {
     const info = require('./process').info();
@@ -47,10 +59,7 @@ app.get('/raminfo', (req, res) => {
 
 // CPU
 app.get('/cpu', (req, res) => {
-  //  const info = require('./cpu').info();
     res.render('cpu', {
- //       cpuTotal: info.cpuTotal,
- //       cpuUsage: info.cpuUsage
     });
 });
 
@@ -84,7 +93,73 @@ app.post('/login', (req, res) => {
         res.redirect('/login');
     }
 });
+*/
 
+app.get('/api/tweets', (req, res) => {
+
+    MongoClient.connect(url, function(err, client) {
+            
+        if (err) throw err;
+        console.log("Connected successfully to server");
+    
+        const db = client.db(DB_NAME);
+        const collection = db.collection(COLLECITON_NAME);
+        const list = collection.find({}).toArray(function(err, result){
+            res.json(result);
+        });
+        
+    });
+
+});
+
+app.get('/api/tweet', (req, res) => {
+
+
+    const usr = req.query.usr;
+    const nom = req.query.nom;
+    const txt = req.query.txt;
+
+    try {
+
+        const tweet = {
+            alias_usuario: usr,
+            nombre: nom,
+            txt: txt,
+            categoria: '#test'
+        };
+
+        require('./mongo').insert(tweet);
+
+        res.json({
+            success: true,
+            tweet: tweet
+        });
+    } catch(e) {
+        res.json({
+            success: false,
+            error: e
+        });
+    }
+
+});
+
+
+app.get('/api/delete-tweets', (req, res) => {
+
+    try {
+        require('./mongo').delete();
+
+        res.json({
+            success: true
+        });
+    } catch(e) {
+        res.json({
+            success: false,
+            error: e
+        });
+    }
+
+});
 
 // static folder
 app.use(express.static(path.join(__dirname, 'public')));
