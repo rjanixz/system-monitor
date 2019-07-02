@@ -1,3 +1,5 @@
+const _ = require('underscore');
+const HashMap = require('hashmap');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
@@ -23,6 +25,13 @@ const url = 'mongodb://admin:admin@35.225.220.91:27017';
 const DB_NAME = 'sopes1proyecto';
 
 const COLLECITON_NAME = 'tweets';
+
+
+app.get('/', (req, res) => {
+    res.redirect('/login')
+});
+
+
 
 /*
 // procesos
@@ -76,10 +85,9 @@ app.get('/cpuinfo', (req, res) => {
 });
 
 
-
+*/
 app.get('/login', (req, res) => {
-    res.render('login', {
-    });
+    res.render('login', {});
 });
 
 app.post('/login', (req, res) => {
@@ -88,23 +96,183 @@ app.post('/login', (req, res) => {
 
     console.log(username + ' : ' + password);
     if (username === 'admin' && password === 'admin') {
-        res.redirect('/');
+        res.redirect('/tweets');
     } else {
         res.redirect('/login');
     }
 });
-*/
+
+app.get('/tweets', (req, res) => {
+    MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
+            
+        if (err) throw err;
+    
+        const db = client.db(DB_NAME);
+        const collection = db.collection(COLLECITON_NAME);
+
+        let q = req.query.q;
+
+        let query = {};
+        if (q) {
+            q = q.replace('%23', '#');
+            query = {
+                txt: new RegExp(q)
+            }
+        }
+
+        collection.find(query).toArray(function(err, result){
+            res.render('tweets', {
+                tweets: result,
+                total: result.length,
+                q: q
+            });
+        });
+        
+    });
+});
+
+
+app.get('/dashboard', (req, res) => {
+    MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
+            
+        if (err) throw err;
+    
+        const db = client.db(DB_NAME);
+        const collection = db.collection(COLLECITON_NAME);
+
+
+        collection.find({}).toArray(function(err, result){
+
+            let totalTweets = result.length;
+            const totalUsuarios = new HashMap();
+            const totalCategorias = new HashMap();
+
+            _.forEach(result, tweet => {
+                if (totalUsuarios.has(tweet.alias_usuario)) {
+                    totalUsuarios.set(tweet.alias_usuario, parseInt(totalUsuarios.get(tweet.alias_usuario)) + 1);
+                } else {
+                    totalUsuarios.set(tweet.alias_usuario, 1);
+                }
+
+                if (totalCategorias.has(tweet.categoria)) {
+                    totalCategorias.set(tweet.categoria, parseInt(totalCategorias.get(tweet.categoria)) + 1);
+                } else {
+                    totalCategorias.set(tweet.categoria, 1)
+                }
+            });
+            
+            let usrMaxTotal = 0;
+            let usrMaxNombre = '';
+
+            totalUsuarios.forEach(function(total, usr) {
+                if (total > usrMaxTotal) {
+                    usrMaxTotal = total;
+                    usrMaxNombre = usr;
+                }
+            });
+
+            let categoriaMaxTotal = 0;
+            let categoriaMaxNombre = '';
+
+            totalCategorias.forEach((total, categoria) => {
+
+                if (total > categoriaMaxTotal) {
+                    categoriaMaxTotal = total;
+                    categoriaMaxNombre = categoria;
+                }
+            });
+
+
+            res.render('dashboard', {
+                totalTweets: totalTweets,
+                totalUsuarios: totalUsuarios.size,
+                totalCategorias: totalCategorias.size,
+                totalImagenes: 0,
+                usrMaxNombre, usrMaxNombre,
+                usrMaxTotal: usrMaxTotal,
+                categoriaMaxNombre: categoriaMaxNombre,
+                categoriaMaxTotal: categoriaMaxTotal
+            });
+        });
+        
+    });
+});
+
+app.get('/api/pie', (req, res) => {
+    MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
+            
+        if (err) throw err;
+    
+        const db = client.db(DB_NAME);
+        const collection = db.collection(COLLECITON_NAME);
+
+
+        collection.find({}).toArray(function(err, result){
+
+            let totalTweets = result.length;
+            const totalCategorias = new HashMap();
+
+            _.forEach(result, tweet => {
+
+                if (totalCategorias.has(tweet.categoria)) {
+                    totalCategorias.set(tweet.categoria, parseInt(totalCategorias.get(tweet.categoria)) + 1);
+                } else {
+                    totalCategorias.set(tweet.categoria, 1)
+                }
+            });
+
+            const categoriaList = totalCategorias.entries();
+
+
+
+            let categoriaListObj =  _.map(categoriaList, entry => {
+                return {
+                    cat: entry[0],
+                    total: entry[1]
+                }
+            });
+
+            categoriaListObj = _.sortBy(categoriaListObj, function(item) {
+                return - item.total;
+            })
+            
+
+            const labels = [];
+            const values = [];
+            let cont = 0;
+
+            categoriaListObj.forEach(item => {
+
+                if (cont < 10) {
+                    labels.push(item.cat);
+                    values.push(item.total);
+                }
+            })
+            
+
+            res.json({
+                labels: labels,
+                values: values
+            })
+        });
+        
+    });
+});
+
+
+///////////////////////// API
+
 
 app.get('/api/tweets', (req, res) => {
 
-    MongoClient.connect(url, function(err, client) {
+    MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
             
         if (err) throw err;
         console.log("Connected successfully to server");
     
         const db = client.db(DB_NAME);
         const collection = db.collection(COLLECITON_NAME);
-        const list = collection.find({}).toArray(function(err, result){
+        collection.find({}).toArray(function(err, result){
             res.json(result);
         });
         
@@ -114,6 +282,22 @@ app.get('/api/tweets', (req, res) => {
 
 app.get('/api/tweet', (req, res) => {
 
+    let categoria = '#';
+    const url = req.url;    
+    const catindex = url.indexOf('%23');
+
+    if (catindex >0) {
+        const urlcat = req.url.substring(catindex);
+        const endindex = urlcat.indexOf('%20');
+        if (endindex > 0) {
+            categoria = urlcat.substring(0, endindex);
+        } else {
+            categoria = urlcat;
+        }
+        
+    }
+    
+    categoria = categoria.replace('%23', '#');
 
     const usr = req.query.usr;
     const nom = req.query.nom;
@@ -125,7 +309,7 @@ app.get('/api/tweet', (req, res) => {
             alias_usuario: usr,
             nombre: nom,
             txt: txt,
-            categoria: '#test'
+            categoria: categoria
         };
 
         require('./mongo').insert(tweet);

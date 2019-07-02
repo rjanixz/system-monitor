@@ -8,7 +8,7 @@ function addData(chart, label, data) {
 }
 
 $(function(){
- 
+ /*
     // RAM Chart
     var ctx = document.getElementById("earnings_chart").getContext("2d");
     var ramChart = new Chart(ctx, {
@@ -31,15 +31,6 @@ $(function(){
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 10,
-                    bottom: 0
-                }
-            },
             legend: {display: true}
         }
     });
@@ -57,6 +48,51 @@ $(function(){
                 setTimeout(ramworker, 5000);
             }
         })
-    })();
+    })();*/
+
+
+    $.ajax({
+        url: '/api/pie',
+        success: function(data) {
+
+            var ctx = document.getElementById("earnings_chart").getContext("2d");
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            data: data.values,
+                            backgroundColor: [
+                                '#5C6BC0',
+                                '#18C5A9',
+                                '#2CC4CB',
+                                '#F39C12',
+                                '#f75a5f',
+                                '#bdc3c7',
+                                '#FF4081',
+                                '#34495f',
+                                '#7536e6',
+                                '#3498DB'
+                            ],
+                            label: 'Top 10 categoría'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        fullwidth: false
+                    }
+                }
+            });
+
+        }, 
+        complete: function() {
+            console.log('pie created')
+        }
+    })
 
 });

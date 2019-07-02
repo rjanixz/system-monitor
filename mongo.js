@@ -12,7 +12,7 @@ const COLLECITON_NAME = 'tweets';
 const MONGODB = {
 
     insert: function(document) {
-        MongoClient.connect(url, function(err, client) {
+        MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
             
             if (err) throw err;
             console.log("Connected successfully to server");
@@ -29,7 +29,7 @@ const MONGODB = {
     },
 
     delete: function(callback) {
-        MongoClient.connect(url, function(err, client) {
+        MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
             
             if (err) throw err;
             console.log("Connected successfully to server");

@@ -1,0 +1,144 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>Sistemas Operativos 1</title>
+    <!-- GLOBAL MAINLY STYLES-->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="vendors/line-awesome/css/line-awesome.min.css" rel="stylesheet" />
+    <link href="vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <link href="vendors/animate.css/animate.min.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->
+    <!-- THEME STYLES-->
+    <link href="css/main.min.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <header class="header">
+            <!-- START TOP-LEFT TOOLBAR-->
+            <ul class="nav navbar-toolbar">
+                <li>
+                    <a class="nav-link sidebar-toggler js-sidebar-toggler" href="javascript:;">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                </li>
+            </ul>
+            <!-- END TOP-LEFT TOOLBAR-->
+            <!--LOGO-->
+            <a class="page-brand" href="index.html">SO</a>
+            <!-- START TOP-RIGHT TOOLBAR-->
+            <ul class="nav navbar-toolbar">
+                <li class="dropdown dropdown-user">
+                    <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                        <span>Admin</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- END TOP-RIGHT TOOLBAR-->
+        </header>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <nav class="page-sidebar">
+            <ul class="side-menu metismenu scroller">
+                <li class="active">
+                    <a href="javascript:;"><i class="sidebar-item-icon ti-home"></i>
+                        <span class="nav-label">Dashboards</span><i class="fa fa-angle-left arrow"></i></a>
+                    <ul class="nav-2-level collapse in">
+                        <li>
+                            <a class="active" href="/tweets">tweets</a>
+                        </li>
+                        <li>
+                            <a href="/dashboard">dashboard</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+
+                <div class="page-content fade-in-up">
+                    <div class="flexbox-b mb-5">
+                        <span class="mr-4 static-badge badge-pink"><i class="ti-search"></i></span>
+                        <div>
+                            <h5 class="font-strong">Tweets</h5>
+                            <div class="text-light">Sistemas Operativos 1 - Proyecto Final</div>
+                        </div>
+                    </div>
+                    <div class="input-group-icon input-group-icon-left input-group-lg mb-4">
+                        <span class="input-icon input-icon-right"><i class="ti-search"></i></span>
+                        <input id="search" class="form-control form-control-air font-light font-poppins border-0" type="text" placeholder="Buscar tweet ..." style="box-shadow:0 3px 6px rgba(10,16,20,.15);">
+                    </div>
+                    <div class="ibox">
+                        <div class="ibox-body">
+                            <div class="mb-4">
+                                <h3 class="mt-1">{{total}} resultados para:
+                                    <span class="text-primary">“{{q}}”</span>
+                                </h3></div>
+                            <ul class="list-group list-group-full list-group-divider">
+                                {{#each tweets}}
+                                <li class="list-group-item py-3">
+                                    <a class="media-img" href="javascript:;">
+                                        <img class="img-circle" src="img/users/u10.jpg" alt="image" width="54">
+                                        {{this.nombre}}
+                                    </a>
+                                    
+                                    <p class="text-light">{{this.txt}}</p>
+                                    <div class="text-muted font-13">
+                                        <span class="badge badge-primary">{{this.categoria}}</span>
+                                        <span class="mx-2">•</span>
+                                        <span>{{this.usr}}</span>
+                                    </div>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- END PAGE CONTENT-->
+            <footer class="page-footer">
+                <div class="font-13">2019 <b>Vacaciones Junio</b> - Sistemas Operativos 1, Práctica 1</div>
+
+                <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- CORE PLUGINS-->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendors/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="vendors/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="vendors/jquery-validation/dist/jquery.validate.min.js"></script>
+    <!-- PAGE LEVEL PLUGINS-->
+    <script src="vendors/chart.js/dist/Chart.min.js"></script>
+    <script src="vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="js/app.min.js"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script src="js/scripts/dashboard_visitors.js"></script>
+    
+    <script>
+
+        document.querySelector('#search').addEventListener('keypress', function (e) {
+            var key = e.which || e.keyCode;
+            if (key === 13) { // 13 is enter
+                var term = document.getElementById('search').value;
+                term = term.replace('#', '%23');
+                window.location.href = '/tweets?q=' + term;
+            }
+        });
+
+    </script>
+</body>
